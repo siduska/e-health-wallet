@@ -1,0 +1,20 @@
+package com.siduska.ehealthwallet.dto;
+
+import com.siduska.ehealthwallet.entitiy.StatusEnum;
+import jakarta.persistence.Column;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import lombok.Data;
+
+import java.math.BigDecimal;
+
+@Data
+public class ReimbursementDto {
+
+    private Long id;
+    private String patientName;
+    private String identificationNumber;
+    private String medicalProcedure;
+    private BigDecimal cost = BigDecimal.ZERO;
+    private String status;
+}

@@ -26,5 +26,5 @@ public class User {
 
     @ManyToMany(mappedBy = "users")
     @JsonIgnore
-    public Set<ChangeLog> orders;
+    public Set<ChangeLog> logs;
 }

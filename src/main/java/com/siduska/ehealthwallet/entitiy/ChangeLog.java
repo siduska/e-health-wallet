@@ -22,13 +22,14 @@ public class ChangeLog {
     private Long id;
 
     private LocalDateTime changeDateTime;
-    private StatusEnum oldStatus;
-    private StatusEnum newStatus;
-    private String description;
 
-    @ManyToMany
-    @JoinTable(name = "logs_users",
-            joinColumns = @JoinColumn(name = "log_id"),
-            inverseJoinColumns = @JoinColumn(name = "user_id"))
-    private List<User> users;
+    @Enumerated(EnumType.STRING)
+    private StatusEnum oldStatus;
+
+    @Enumerated(EnumType.STRING)
+    private StatusEnum newStatus;
+
+    private String description;
+    private String userName;
+
 }

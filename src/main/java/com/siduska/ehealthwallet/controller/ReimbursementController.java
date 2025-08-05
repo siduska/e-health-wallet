@@ -4,7 +4,6 @@ import com.siduska.ehealthwallet.dto.CreateReimbursementRequest;
 import com.siduska.ehealthwallet.dto.ReimbursementDto;
 import com.siduska.ehealthwallet.dto.UpdateReimbursementRequest;
 import com.siduska.ehealthwallet.entitiy.Reimbursement;
-import com.siduska.ehealthwallet.entitiy.StatusEnum;
 import com.siduska.ehealthwallet.mapper.ReimbursementMapper;
 import com.siduska.ehealthwallet.repository.ReimbursementRepository;
 import com.siduska.ehealthwallet.service.ReimbursementService;

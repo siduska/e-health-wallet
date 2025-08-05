@@ -6,4 +6,5 @@ import lombok.Data;
 public class UpdateReimbursementRequest {
 
     String status;
+    String description;
 }

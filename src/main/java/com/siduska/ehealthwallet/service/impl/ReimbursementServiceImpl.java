@@ -1,5 +1,6 @@
 package com.siduska.ehealthwallet.service.impl;
 
+import com.siduska.ehealthwallet.dto.CreateReimbursementRequest;
 import com.siduska.ehealthwallet.dto.ReimbursementDto;
 import com.siduska.ehealthwallet.dto.UpdateReimbursementRequest;
 import com.siduska.ehealthwallet.entitiy.ChangeLog;
@@ -66,6 +67,18 @@ public class ReimbursementServiceImpl implements ReimbursementService {
     @Override
     public Reimbursement getReimbursementById(Long id) {
         return reimbursementRepository.findById(id).orElse(null);
+    }
+
+    @Override
+    public Reimbursement createReimbursement(CreateReimbursementRequest request) {
+        var reimbursement = reimbursementMapper.toEntity(request);
+        reimbursementRepository.save(reimbursement);
+        return reimbursement;
+    }
+
+    @Override
+    public void delete(Reimbursement reimbursement) {
+        reimbursementRepository.delete(reimbursement);
     }
 
 }

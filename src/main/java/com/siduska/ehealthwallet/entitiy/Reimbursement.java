@@ -24,7 +24,7 @@ public class Reimbursement {
     private String medicalProcedure;
     private BigDecimal cost;
 
-    @Enumerated(EnumType.STRING)
+    //@Enumerated(EnumType.STRING)
     @Column(length = 8)
     private StatusEnum status;
 

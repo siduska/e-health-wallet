@@ -5,7 +5,6 @@ import com.siduska.ehealthwallet.dto.ReimbursementDto;
 import com.siduska.ehealthwallet.dto.UpdateReimbursementRequest;
 import com.siduska.ehealthwallet.entitiy.Reimbursement;
 import com.siduska.ehealthwallet.mapper.ReimbursementMapper;
-import com.siduska.ehealthwallet.repository.ReimbursementRepository;
 import com.siduska.ehealthwallet.service.ReimbursementService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -19,7 +18,6 @@ import java.util.List;
 @RequestMapping("/reimbursements")
 public class ReimbursementController {
 
-    private final ReimbursementRepository reimbursementRepository;
     private final ReimbursementMapper reimbursementMapper;
     private final ReimbursementService reimbursementService;
 
@@ -52,9 +50,7 @@ public class ReimbursementController {
             UriComponentsBuilder uriBuilder
     ) {
 
-        var reimbursement = reimbursementMapper.toEntity(request);
-        reimbursementRepository.save(reimbursement);
-
+        var reimbursement = reimbursementService.createReimbursement(request);
         var reimbursementDto = reimbursementMapper.toReimbursementDto(reimbursement);
         var uri = uriBuilder.path("/reimbursements/{id}").buildAndExpand(reimbursementDto.getId()).toUri();
 
@@ -83,7 +79,7 @@ public class ReimbursementController {
             return ResponseEntity.notFound().build();
         }
 
-        reimbursementRepository.delete(reimbursement);
+        reimbursementService.delete(reimbursement);
 
         return ResponseEntity.noContent().build();
     }

@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="https://www.thymeleaf.org/">
+<head>
+    <meta charset="ISO-8859-1">
+    <title>Employee Management System</title>
+    <style>
+        table {
+            width: 90%;
+        }
+        th {
+            background-color: lightseagreen;
+        }
+        th, td {
+            text-align: left;
+            padding: 8px;
+            border-bottom: 1px solid #ddd;
+        }
+        tr:hover {
+            background-color: rgba(32, 178, 170, 0.50);
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h1>Pending reimbursements</h1>
+
+    <table>
+        <thead>
+        <tr>
+            <th> Patient name</th>
+            <th> Identification number</th>
+            <th> Medical procedure</th>
+            <th> Cost</th>
+            <th> Status</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="item, itemStat : *{pending}">
+            <td><p th:text="*{pending[__${itemStat.index}__].patientName}" /></td>
+            <td><p th:text="*{pending[__${itemStat.index}__].identificationNumber}" /></td>
+            <td><p th:text="*{pending[__${itemStat.index}__].medicalProcedure}" /></td>
+            <td><p th:text="*{pending[__${itemStat.index}__].cost}" /></td>
+            <td><p th:text="*{pending[__${itemStat.index}__].status.name()}" /></td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+</body>
+</html>

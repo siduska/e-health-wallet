@@ -72,6 +72,7 @@ public class ReimbursementDataTest {
     @Rollback(value = false)
     public void deleteReimbursementTest(){
         Reimbursement reimbursement = reimbursementRepository.findById(1L).get();
+        Assertions.assertThat(reimbursement).isNotNull();
         reimbursementRepository.delete(reimbursement);
         Reimbursement reimbursementTest = null;
         Optional<Reimbursement> reimbursementTestRef = reimbursementRepository.findByIdentificationNumber( "00000111" );

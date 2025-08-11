@@ -27,27 +27,22 @@ public class ReimbursementServiceImpl implements ReimbursementService {
     private final ReimbursementRepository reimbursementRepository;
     private final ReimbursementMapper reimbursementMapper;
     private final ChangeLogService changelogService;
-    private final ChangeLogRepository changeLogRepository;
     private final UserService userService;
-    private static final Logger LOGGER = LogManager.getLogger();
 
-    public Reimbursement updateReimbursement(Long id, UpdateReimbursementRequest request) {
+    public ReimbursementDto updateReimbursement(Long id, UpdateReimbursementRequest request) {
         var reimbursement = reimbursementRepository.findById(id).orElse(null);
 
         if (reimbursement == null) {
             return null;
         }
         String oldStatus = reimbursement.getStatus().toString();
-
         reimbursementMapper.updateReimbursement(request, reimbursement);
         reimbursementRepository.save(reimbursement);
 
         String newStatus = reimbursement.getStatus().toString();
-        ChangeLog log = changelogService.createChangeLog(oldStatus, newStatus, request.getDescription(),userService.getUserName());
-        changeLogRepository.save(log);
-        LOGGER.info(log);
+        changelogService.createChangeLog(oldStatus, newStatus, request.getDescription(),userService.getUserName());
 
-        return reimbursement;
+        return reimbursementMapper.toReimbursementDto(reimbursement);
     }
 
     @Override
@@ -57,28 +52,33 @@ public class ReimbursementServiceImpl implements ReimbursementService {
     }
 
     @Override
-    public List<Reimbursement> getAllReimbursementsByStatus(String status) {
-        return reimbursementRepository.findAll()
+    public List<ReimbursementDto> getAllReimbursementsByStatus(String status) {
+        List<Reimbursement> rem = reimbursementRepository.findAll()
                 .stream()
                 .filter(c -> c.getStatus().equals(StatusEnum.valueOf(status)))
                 .toList();
+        return  rem.stream().map(reimbursementMapper::toReimbursementDto).toList();
     }
 
     @Override
-    public Reimbursement getReimbursementById(Long id) {
-        return reimbursementRepository.findById(id).orElse(null);
+    public ReimbursementDto getReimbursementById(Long id) {
+        Reimbursement reimbursement = reimbursementRepository.findById(id).orElse(null);
+        if (reimbursement != null) {
+            return reimbursementMapper.toReimbursementDto(reimbursement);
+        }
+        return null;
     }
 
     @Override
-    public Reimbursement createReimbursement(CreateReimbursementRequest request) {
+    public ReimbursementDto createReimbursement(CreateReimbursementRequest request) {
         var reimbursement = reimbursementMapper.toEntity(request);
         reimbursementRepository.save(reimbursement);
-        return reimbursement;
+        return reimbursementMapper.toReimbursementDto(reimbursement);
     }
 
     @Override
-    public void delete(Reimbursement reimbursement) {
-        reimbursementRepository.delete(reimbursement);
+    public void deleteById(Long id) {
+        reimbursementRepository.deleteById(id);
     }
 
 }

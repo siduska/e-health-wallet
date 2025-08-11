@@ -3,8 +3,6 @@ package com.siduska.ehealthwallet.controller;
 import com.siduska.ehealthwallet.dto.CreateReimbursementRequest;
 import com.siduska.ehealthwallet.dto.ReimbursementDto;
 import com.siduska.ehealthwallet.dto.UpdateReimbursementRequest;
-import com.siduska.ehealthwallet.entitiy.Reimbursement;
-import com.siduska.ehealthwallet.mapper.ReimbursementMapper;
 import com.siduska.ehealthwallet.service.ReimbursementService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -18,7 +16,6 @@ import java.util.List;
 @RequestMapping("/reimbursements")
 public class ReimbursementController {
 
-    private final ReimbursementMapper reimbursementMapper;
     private final ReimbursementService reimbursementService;
 
     @GetMapping
@@ -28,8 +25,8 @@ public class ReimbursementController {
 
     @GetMapping("/filter")
     public List<ReimbursementDto> getAllReimbursementsByStatus(@RequestParam("filter") String statusFilter) {
-        List<Reimbursement> rem = reimbursementService.getAllReimbursementsByStatus(statusFilter);
-        return  rem.stream().map(reimbursementMapper::toReimbursementDto).toList();
+
+        return reimbursementService.getAllReimbursementsByStatus(statusFilter);
     }
 
 
@@ -41,7 +38,7 @@ public class ReimbursementController {
             return ResponseEntity.notFound().build();
         }
 
-        return ResponseEntity.ok(reimbursementMapper.toReimbursementDto(reimbursement));
+        return ResponseEntity.ok(reimbursement);
     }
 
     @PostMapping
@@ -50,8 +47,7 @@ public class ReimbursementController {
             UriComponentsBuilder uriBuilder
     ) {
 
-        var reimbursement = reimbursementService.createReimbursement(request);
-        var reimbursementDto = reimbursementMapper.toReimbursementDto(reimbursement);
+        var reimbursementDto = reimbursementService.createReimbursement(request);
         var uri = uriBuilder.path("/reimbursements/{id}").buildAndExpand(reimbursementDto.getId()).toUri();
 
         return ResponseEntity.created(uri).body(reimbursementDto);
@@ -62,13 +58,14 @@ public class ReimbursementController {
             @PathVariable(name = "id") Long id,
             @RequestBody UpdateReimbursementRequest request
     ){
-        var reimbursement = reimbursementService.updateReimbursement(id, request);
+        //var reimbursement = reimbursementService.updateReimbursement(id, request);
+        var reimbursement = reimbursementService.getReimbursementById(id);
 
         if (reimbursement == null) {
             return ResponseEntity.notFound().build();
         }
 
-        return ResponseEntity.ok(reimbursementMapper.toReimbursementDto(reimbursement));
+        return ResponseEntity.ok(reimbursementService.updateReimbursement(id, request));
     }
 
     @DeleteMapping("/{id}")
@@ -79,8 +76,7 @@ public class ReimbursementController {
             return ResponseEntity.notFound().build();
         }
 
-        reimbursementService.delete(reimbursement);
-
+        reimbursementService.deleteById(id);
         return ResponseEntity.noContent().build();
     }
 

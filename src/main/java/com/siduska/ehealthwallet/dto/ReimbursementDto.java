@@ -1,9 +1,5 @@
 package com.siduska.ehealthwallet.dto;
 
-import com.siduska.ehealthwallet.entitiy.StatusEnum;
-import jakarta.persistence.Column;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
 import lombok.Data;
 
 import java.math.BigDecimal;

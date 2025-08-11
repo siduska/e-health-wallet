@@ -3,18 +3,14 @@ package com.siduska.ehealthwallet.service.impl;
 import com.siduska.ehealthwallet.dto.CreateReimbursementRequest;
 import com.siduska.ehealthwallet.dto.ReimbursementDto;
 import com.siduska.ehealthwallet.dto.UpdateReimbursementRequest;
-import com.siduska.ehealthwallet.entitiy.ChangeLog;
 import com.siduska.ehealthwallet.entitiy.Reimbursement;
 import com.siduska.ehealthwallet.entitiy.StatusEnum;
 import com.siduska.ehealthwallet.mapper.ReimbursementMapper;
-import com.siduska.ehealthwallet.repository.ChangeLogRepository;
 import com.siduska.ehealthwallet.repository.ReimbursementRepository;
 import com.siduska.ehealthwallet.service.ChangeLogService;
 import com.siduska.ehealthwallet.service.ReimbursementService;
 import com.siduska.ehealthwallet.service.UserService;
 import lombok.AllArgsConstructor;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.springframework.stereotype.Service;
 
 import java.util.List;

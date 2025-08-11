@@ -58,7 +58,6 @@ public class ReimbursementController {
             @PathVariable(name = "id") Long id,
             @RequestBody UpdateReimbursementRequest request
     ){
-        //var reimbursement = reimbursementService.updateReimbursement(id, request);
         var reimbursement = reimbursementService.getReimbursementById(id);
 
         if (reimbursement == null) {

@@ -4,6 +4,9 @@ import com.siduska.ehealthwallet.dto.CreateReimbursementRequest;
 import com.siduska.ehealthwallet.dto.ReimbursementDto;
 import com.siduska.ehealthwallet.dto.UpdateReimbursementRequest;
 import com.siduska.ehealthwallet.service.ReimbursementService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -14,67 +17,71 @@ import java.util.List;
 @RestController
 @AllArgsConstructor
 @RequestMapping("/reimbursements")
+@Tag(name = "Reimbursements", description = "Reimbursements API")
 public class ReimbursementController {
 
     private final ReimbursementService reimbursementService;
 
     @GetMapping
+    @Operation(summary = "Get all reimbursements")
     public Iterable<ReimbursementDto> getAllReimbursements() {
         return reimbursementService.getAllReimbursements();
     }
 
     @GetMapping("/filter")
-    public List<ReimbursementDto> getAllReimbursementsByStatus(@RequestParam("filter") String statusFilter) {
-
+    @Operation(summary = "Get all reimbursements by status")
+    public List<ReimbursementDto> getAllReimbursementsByStatus(
+            @Parameter(description = "Reimbursement status")
+            @RequestParam("filter") String statusFilter) {
         return reimbursementService.getAllReimbursementsByStatus(statusFilter);
     }
 
 
     @GetMapping("/{id}")
-    public ResponseEntity<ReimbursementDto> getReimbursementById(@PathVariable(name = "id") Long id) {
+    @Operation(summary = "Get reimbursement by id")
+    public ResponseEntity<ReimbursementDto> getReimbursementById(
+            @Parameter(description = "Reimbursement id")
+            @PathVariable(name = "id") Long id) {
         var reimbursement = reimbursementService.getReimbursementById(id);
-
         if(reimbursement == null) {
             return ResponseEntity.notFound().build();
         }
-
         return ResponseEntity.ok(reimbursement);
     }
 
     @PostMapping
+    @Operation(summary = "Create new reimbursement")
     public ResponseEntity<?> createReimbursement(
             @RequestBody CreateReimbursementRequest request,
             UriComponentsBuilder uriBuilder
     ) {
-
         var reimbursementDto = reimbursementService.createReimbursement(request);
         var uri = uriBuilder.path("/reimbursements/{id}").buildAndExpand(reimbursementDto.getId()).toUri();
-
         return ResponseEntity.created(uri).body(reimbursementDto);
     }
 
     @PutMapping("/{id}")
+    @Operation(summary = "Update reimbursement")
     public ResponseEntity<ReimbursementDto> updateReimbursement(
+            @Parameter(description = "Reimbursement id")
             @PathVariable(name = "id") Long id,
             @RequestBody UpdateReimbursementRequest request
     ){
         var reimbursement = reimbursementService.getReimbursementById(id);
-
         if (reimbursement == null) {
             return ResponseEntity.notFound().build();
         }
-
         return ResponseEntity.ok(reimbursementService.updateReimbursement(id, request));
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteReimbursement(@PathVariable(name = "id") Long id) {
+    @Operation(summary = "Delete reimbursement")
+    public ResponseEntity<Void> deleteReimbursement(@Parameter(description = "Reimbursement id")
+                                                    @PathVariable(name = "id") Long id) {
         var reimbursement = reimbursementService.getReimbursementById(id);
-
         if (reimbursement == null) {
             return ResponseEntity.notFound().build();
         }
-
         reimbursementService.deleteById(id);
         return ResponseEntity.noContent().build();
     }

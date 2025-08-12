@@ -4,6 +4,9 @@ import com.siduska.ehealthwallet.dto.RegisterUserRequest;
 import com.siduska.ehealthwallet.dto.UpdateUserRequest;
 import com.siduska.ehealthwallet.dto.UserDto;
 import com.siduska.ehealthwallet.service.UserService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -14,27 +17,30 @@ import java.util.Map;
 @RestController
 @AllArgsConstructor
 @RequestMapping("/users")
+@Tag(name = "Users", description = "Users API")
 public class UserController {
 
     private final UserService userService;
 
     @GetMapping
+    @Operation(summary = "Get all users")
     public ResponseEntity<Iterable<UserDto>> getAllUsers() {
         return ResponseEntity.ok(userService.getAllUsers());
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<UserDto> getUserById(@PathVariable(name = "id") Long id) {
+    @Operation(summary = "Get user by id")
+    public ResponseEntity<UserDto> getUserById(@Parameter(name = "User Id")
+                                               @PathVariable(name = "id") Long id) {
         var user = userService.getUserById(id);
-
         if (user == null) {
             return ResponseEntity.notFound().build();
         }
-
         return ResponseEntity.ok(user);
     }
 
     @PostMapping
+    @Operation(summary = "Register new user")
     public ResponseEntity<?> registerUser(
             @RequestBody RegisterUserRequest request,
             UriComponentsBuilder uriBuilder
@@ -44,15 +50,15 @@ public class UserController {
                     Map.of("email", "email already exists")
             );
         }
-
         var userDto = userService.createUser(request);
         var uri = uriBuilder.path("/users/{id}").buildAndExpand(userDto.getId()).toUri();
-
         return ResponseEntity.created(uri).body(userDto);
     }
 
     @PutMapping("/{id}")
+    @Operation(summary = "Update user")
     public ResponseEntity<?> updateUser(
+            @Parameter(name = "User Id")
             @PathVariable(name = "id") Long id,
             @RequestBody UpdateUserRequest request
     ){
@@ -69,7 +75,9 @@ public class UserController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteUser(@PathVariable(name = "id") Long id) {
+    @Operation(summary = "Delete user")
+    public ResponseEntity<Void> deleteUser(@Parameter(name = "User id")
+                                           @PathVariable(name = "id") Long id) {
         var user = userService.getUserById(id);
         if (user == null) {
             return ResponseEntity.notFound().build();

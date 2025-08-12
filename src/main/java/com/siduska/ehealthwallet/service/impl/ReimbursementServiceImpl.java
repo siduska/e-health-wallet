@@ -13,6 +13,7 @@ import com.siduska.ehealthwallet.service.UserService;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.Arrays;
 import java.util.List;
 
 
@@ -75,6 +76,13 @@ public class ReimbursementServiceImpl implements ReimbursementService {
     @Override
     public void deleteById(Long id) {
         reimbursementRepository.deleteById(id);
+    }
+
+    @Override
+    public boolean isStatusExist(String status) {
+        StatusEnum[] values = StatusEnum.values();
+        var found = Arrays.stream(values).filter(s -> s.toString().equals(status)).findAny().orElse(null);
+        return found == null;
     }
 
 }

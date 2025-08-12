@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @AllArgsConstructor
@@ -55,6 +56,11 @@ public class ReimbursementController {
             @RequestBody CreateReimbursementRequest request,
             UriComponentsBuilder uriBuilder
     ) {
+        if (reimbursementService.isStatusExist(request.getStatus())) {
+            return ResponseEntity.badRequest().body(
+                    Map.of("status", "Status " + request.getStatus() + " not defined")
+            );
+        }
         var reimbursementDto = reimbursementService.createReimbursement(request);
         var uri = uriBuilder.path("/reimbursements/{id}").buildAndExpand(reimbursementDto.getId()).toUri();
         return ResponseEntity.created(uri).body(reimbursementDto);
@@ -62,7 +68,7 @@ public class ReimbursementController {
 
     @PutMapping("/{id}")
     @Operation(summary = "Update reimbursement")
-    public ResponseEntity<ReimbursementDto> updateReimbursement(
+    public ResponseEntity<?> updateReimbursement(
             @Parameter(description = "Reimbursement id")
             @PathVariable(name = "id") Long id,
             @RequestBody UpdateReimbursementRequest request
@@ -70,6 +76,11 @@ public class ReimbursementController {
         var reimbursement = reimbursementService.getReimbursementById(id);
         if (reimbursement == null) {
             return ResponseEntity.notFound().build();
+        }
+        if (reimbursementService.isStatusExist(request.getStatus())) {
+            return ResponseEntity.badRequest().body(
+                    Map.of("status", "Status " + request.getStatus() + " not defined")
+            );
         }
         return ResponseEntity.ok(reimbursementService.updateReimbursement(id, request));
     }

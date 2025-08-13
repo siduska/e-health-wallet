@@ -7,13 +7,13 @@ import com.siduska.ehealthwallet.service.ReimbursementService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import java.util.List;
-import java.util.Map;
 
 @RestController
 @AllArgsConstructor
@@ -42,25 +42,16 @@ public class ReimbursementController {
     @Operation(summary = "Get reimbursement by id")
     public ResponseEntity<ReimbursementDto> getReimbursementById(
             @Parameter(description = "Reimbursement id")
-            @PathVariable(name = "id") Long id) {
-        var reimbursement = reimbursementService.getReimbursementById(id);
-        if(reimbursement == null) {
-            return ResponseEntity.notFound().build();
-        }
-        return ResponseEntity.ok(reimbursement);
+            @Valid @PathVariable(name = "id") Long id) {
+        return ResponseEntity.ok(reimbursementService.getReimbursementById(id));
     }
 
     @PostMapping
     @Operation(summary = "Create new reimbursement")
     public ResponseEntity<?> createReimbursement(
-            @RequestBody CreateReimbursementRequest request,
+            @Valid @RequestBody CreateReimbursementRequest request,
             UriComponentsBuilder uriBuilder
     ) {
-        if (reimbursementService.isStatusExist(request.getStatus())) {
-            return ResponseEntity.badRequest().body(
-                    Map.of("status", "Status " + request.getStatus() + " not defined")
-            );
-        }
         var reimbursementDto = reimbursementService.createReimbursement(request);
         var uri = uriBuilder.path("/reimbursements/{id}").buildAndExpand(reimbursementDto.getId()).toUri();
         return ResponseEntity.created(uri).body(reimbursementDto);
@@ -70,29 +61,16 @@ public class ReimbursementController {
     @Operation(summary = "Update reimbursement")
     public ResponseEntity<?> updateReimbursement(
             @Parameter(description = "Reimbursement id")
-            @PathVariable(name = "id") Long id,
-            @RequestBody UpdateReimbursementRequest request
+            @Valid @PathVariable(name = "id") Long id,
+            @Valid @RequestBody UpdateReimbursementRequest request
     ){
-        var reimbursement = reimbursementService.getReimbursementById(id);
-        if (reimbursement == null) {
-            return ResponseEntity.notFound().build();
-        }
-        if (reimbursementService.isStatusExist(request.getStatus())) {
-            return ResponseEntity.badRequest().body(
-                    Map.of("status", "Status " + request.getStatus() + " not defined")
-            );
-        }
         return ResponseEntity.ok(reimbursementService.updateReimbursement(id, request));
     }
 
     @DeleteMapping("/{id}")
     @Operation(summary = "Delete reimbursement")
     public ResponseEntity<Void> deleteReimbursement(@Parameter(description = "Reimbursement id")
-                                                    @PathVariable(name = "id") Long id) {
-        var reimbursement = reimbursementService.getReimbursementById(id);
-        if (reimbursement == null) {
-            return ResponseEntity.notFound().build();
-        }
+                                                    @Valid @PathVariable(name = "id") Long id) {
         reimbursementService.deleteById(id);
         return ResponseEntity.noContent().build();
     }

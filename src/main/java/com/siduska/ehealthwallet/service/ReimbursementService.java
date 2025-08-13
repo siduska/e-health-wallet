@@ -15,5 +15,4 @@ public interface ReimbursementService {
     ReimbursementDto getReimbursementById(Long id);
     ReimbursementDto createReimbursement(CreateReimbursementRequest request);
     void deleteById(Long id);
-    boolean isStatusExist(String status);
 }

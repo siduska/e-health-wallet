@@ -1,5 +1,6 @@
 package com.siduska.ehealthwallet.dto;
 
+import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.Getter;
@@ -11,5 +12,7 @@ public class UserDto {
 
     private Long id;
     private String name;
+
+    @NotBlank
     private String email;
 }

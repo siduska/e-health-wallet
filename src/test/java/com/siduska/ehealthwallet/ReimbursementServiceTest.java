@@ -11,6 +11,7 @@ import com.siduska.ehealthwallet.service.ChangeLogService;
 import com.siduska.ehealthwallet.service.UserService;
 import com.siduska.ehealthwallet.service.impl.ReimbursementServiceImpl;
 import org.junit.Test;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
@@ -57,6 +58,7 @@ public class ReimbursementServiceTest {
             .cost(BigDecimal.valueOf(100)).build();
 
     @Test
+    @DisplayName("Processing valid reimbursement request should return valid dto")
     public void testCreateReimbursementService() {
 
         CreateReimbursementRequest createReimbursementRequest = CreateReimbursementRequest.builder()
@@ -71,6 +73,7 @@ public class ReimbursementServiceTest {
 
         ReimbursementDto result = service.createReimbursement(createReimbursementRequest);
 
+        assertNotNull(result);
         assertEquals("John", result.getPatientName());
         assertEquals("PENDING", result.getStatus());
         assertEquals("1234567890", result.getIdentificationNumber());
@@ -78,6 +81,8 @@ public class ReimbursementServiceTest {
     }
 
     @Test
+    @DisplayName("Processing valid reimbursement update request should return updated dto" +
+            "and changelog should be created")
     public void testUpdateReimbursementService() {
         // Given
         Long id = 1L;
@@ -122,6 +127,7 @@ public class ReimbursementServiceTest {
     }
 
     @Test
+    @DisplayName("Processing get all reimbursements should return list of dto")
     public void testGetAllReimbursementsService() {
         Reimbursement test = Reimbursement.builder()
                 .id(2L)
@@ -138,6 +144,7 @@ public class ReimbursementServiceTest {
     }
 
     @Test
+    @DisplayName("Processing get all reimbursements should return list of filtered dto")
     public void testGetAllReimbursementsByStatus() {
         given(reimbursementRepository.findAll()).willReturn(List.of(reimbursement));
         given(reimbursementMapper.toReimbursementDto(reimbursement)).willReturn(reimbursementDto);
@@ -149,6 +156,7 @@ public class ReimbursementServiceTest {
     }
 
     @Test
+    @DisplayName("Processing get reimbursement by valid Id should return dto with id")
     public void testGetReimbursementById() {
         Long id = 1L;
         given(reimbursementRepository.findById(id)).willReturn(Optional.of(reimbursement));

@@ -71,8 +71,7 @@ public class ReimbursementServiceImpl implements ReimbursementService {
 
     @Override
     public void deleteById(Long id) {
-        reimbursementRepository.findById(id)
-                .orElseThrow(() -> new ReimbursementNotFoundException(id));
+        getExistingReimbursementById(id);
         reimbursementRepository.deleteById(id);
     }
 

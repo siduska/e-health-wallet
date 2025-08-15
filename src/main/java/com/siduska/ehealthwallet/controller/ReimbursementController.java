@@ -6,6 +6,7 @@ import com.siduska.ehealthwallet.dto.UpdateReimbursementRequest;
 import com.siduska.ehealthwallet.service.ReimbursementService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
@@ -19,6 +20,7 @@ import java.util.List;
 @AllArgsConstructor
 @RequestMapping("/reimbursements")
 @Tag(name = "Reimbursements", description = "Reimbursements API")
+@SecurityRequirement(name = "ehealthwalletapi")
 public class ReimbursementController {
 
     private final ReimbursementService reimbursementService;

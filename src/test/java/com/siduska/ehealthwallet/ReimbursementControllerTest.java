@@ -1,3 +1,4 @@
+
 package com.siduska.ehealthwallet;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -12,7 +13,10 @@ import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.context.annotation.Import;
 import org.springframework.http.MediaType;
+import org.springframework.security.test.context.support.WithMockUser;
+import org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
@@ -58,6 +62,7 @@ public class ReimbursementControllerTest {
         String invalidStatus = "INVALID";
         String expectedInvalidStatusMessage = "Invalid status: INVALID. Allowed statuses: [PENDING, APPROVED, REJECTED]";
 
+    @WithMockUser(value = "spring")
     @Test
     public void get_AllReimbursements_returns_ReimbursementsList_Ok() throws Exception {
 
@@ -71,6 +76,7 @@ public class ReimbursementControllerTest {
                     .andExpect(jsonPath("$[1].id").value(2));
     }
 
+    @WithMockUser(value = "spring")
     @Test
     public void setValidStatus_get_AllReimbursementsByStatus_returns_filteredReimbursementsList_Ok() throws Exception {
         String status = "PENDING";
@@ -86,6 +92,7 @@ public class ReimbursementControllerTest {
 
     }
 
+    @WithMockUser(value = "spring")
     @Test
     public void setInvalidStatus_get_AllReimbursementsByStatus_returns_BadRequest() throws Exception {
 
@@ -100,6 +107,7 @@ public class ReimbursementControllerTest {
                 .andExpect(jsonPath("$.message").value(expectedInvalidStatusMessage));
     }
 
+    @WithMockUser(value = "spring")
     @Test
     public void setValidId_getReimbursementById_returns_ReimbursementDto_Ok() throws Exception {
 
@@ -112,6 +120,7 @@ public class ReimbursementControllerTest {
                 .andExpect(MockMvcResultMatchers.jsonPath("$.id").value(validId));
     }
 
+    @WithMockUser(value = "spring")
     @Test
     public void setInvalidId_getReimbursementById_returns_BadRequest() throws Exception {
 
@@ -124,6 +133,7 @@ public class ReimbursementControllerTest {
                 .andExpect(jsonPath("$.message").value(notFoundMessage));
     }
 
+    @WithMockUser(value = "spring")
     @Test
     public void setValid_createReimbursement_returns_ReimbursementDto_Created() throws Exception {
 
@@ -131,6 +141,7 @@ public class ReimbursementControllerTest {
 
         mockMvc.perform(MockMvcRequestBuilders
                         .post("/reimbursements")
+                        .with(SecurityMockMvcRequestPostProcessors.csrf())
                         .content(asJsonString(createRequest))
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON))
@@ -139,6 +150,7 @@ public class ReimbursementControllerTest {
                 .andExpect(MockMvcResultMatchers.jsonPath("$.identificationNumber").value("1234567890"));
     }
 
+    @WithMockUser(value = "spring")
     @Test
     public void setInvalidStatus_createReimbursement_returns_ReimbursementDto_BadRequest() throws Exception {
         createRequest.setStatus(invalidStatus);
@@ -148,12 +160,14 @@ public class ReimbursementControllerTest {
 
         mockMvc.perform(MockMvcRequestBuilders
                         .post("/reimbursements")
+                        .with(SecurityMockMvcRequestPostProcessors.csrf())
                         .content(asJsonString(createRequest))
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isBadRequest());
     }
 
+    @WithMockUser(value = "spring")
     @Test
     public void setValid_updateReimbursement_returns_ReimbursementDto_Ok() throws Exception {
 
@@ -162,6 +176,7 @@ public class ReimbursementControllerTest {
 
         mockMvc.perform(MockMvcRequestBuilders
                         .put("/reimbursements/" + validId)
+                        .with(SecurityMockMvcRequestPostProcessors.csrf())
                         .content(asJsonString(updateRequest))
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON))
@@ -170,6 +185,7 @@ public class ReimbursementControllerTest {
                 .andExpect(MockMvcResultMatchers.jsonPath("$.status").value("APPROVED"));
     }
 
+    @WithMockUser(value = "spring")
     @Test
     public void setInvalidStatus_updateReimbursement_returns_ReimbursementDto_BadRequest() throws Exception {
 
@@ -180,12 +196,15 @@ public class ReimbursementControllerTest {
 
         mockMvc.perform(MockMvcRequestBuilders
                         .put("/reimbursements/" + validId)
+                        .with(SecurityMockMvcRequestPostProcessors.csrf())
+                        .with(SecurityMockMvcRequestPostProcessors.csrf())
                         .content(asJsonString(updateRequest))
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isBadRequest());
     }
 
+    @WithMockUser(value = "spring")
     @Test
     public void setInvalidId_updateReimbursement_returns_ReimbursementDto_NotFound() throws Exception {
 
@@ -194,12 +213,14 @@ public class ReimbursementControllerTest {
 
         mockMvc.perform(MockMvcRequestBuilders
                         .put("/reimbursements/" + invalidId)
+                        .with(SecurityMockMvcRequestPostProcessors.csrf())
                         .content(asJsonString(updateRequest))
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isNotFound());
     }
 
+    @WithMockUser(value = "spring")
     @Test
     public void setValid_deleteReimbursement_returns_NoContent() throws Exception {
 
@@ -207,10 +228,12 @@ public class ReimbursementControllerTest {
 
         mockMvc.perform(MockMvcRequestBuilders
                         .delete("/reimbursements/" + validId)
+                        .with(SecurityMockMvcRequestPostProcessors.csrf())
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isNoContent());
     }
 
+    @WithMockUser(value = "spring")
     @Test
     public void setInvalidId_deleteReimbursement_returns_NotFound() throws Exception {
 
@@ -219,6 +242,7 @@ public class ReimbursementControllerTest {
 
         mockMvc.perform(MockMvcRequestBuilders
                         .delete("/reimbursements/" + invalidId)
+                        .with(SecurityMockMvcRequestPostProcessors.csrf())
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isNotFound())
                 .andExpect(jsonPath("$.message").value(notFoundMessage));

@@ -13,6 +13,7 @@ public class ReimbursementDto {
     private String patientName;
     private String identificationNumber;
     private String medicalProcedure;
+    @Builder.Default
     private BigDecimal cost = BigDecimal.ZERO;
     private String status;
 }

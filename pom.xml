@@ -10,7 +10,7 @@
     </parent>
     <groupId>com.siduska</groupId>
     <artifactId>e-health-wallet</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
+    <version>1.0.0</version>
     <name>e-health-wallet</name>
     <description>e-health-wallet</description>
     <url/>

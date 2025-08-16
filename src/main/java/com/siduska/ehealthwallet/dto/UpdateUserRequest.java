@@ -7,7 +7,7 @@ import lombok.Data;
 public class UpdateUserRequest {
 
     @NotBlank
-    String name;
+    String username;
     @NotBlank
     String email;
 }

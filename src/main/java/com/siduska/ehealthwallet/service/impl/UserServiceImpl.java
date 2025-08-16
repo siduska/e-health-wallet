@@ -7,6 +7,9 @@ import com.siduska.ehealthwallet.mapper.UserMapper;
 import com.siduska.ehealthwallet.repository.UserRepository;
 import com.siduska.ehealthwallet.service.UserService;
 import lombok.AllArgsConstructor;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -15,11 +18,14 @@ public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
     private final UserMapper userMapper;
-    //private final PasswordEncoder passwordEncoder;
+    private final PasswordEncoder passwordEncoder;
 
     public String getUserName()  {
-        return "userName";
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        return principal instanceof UserDetails ? ((UserDetails) principal).getUsername()
+                                                : principal.toString();
     }
+
 
     @Override
     public UserDto getUserById(Long id) {
@@ -36,9 +42,8 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserDto createUser(RegisterUserRequest request) {
-
         var user = userMapper.toEntity(request);
-        //user.setPassword(passwordEncoder.encode(user.getPassword()));
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
         userRepository.save(user);
         return userMapper.toUserDto(user);
     }

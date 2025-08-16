@@ -11,7 +11,7 @@ import lombok.Getter;
 public class UserDto {
 
     private Long id;
-    private String name;
+    private String username;
 
     @NotBlank
     private String email;

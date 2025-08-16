@@ -39,7 +39,7 @@ public class UserController {
         return ResponseEntity.ok(user);
     }
 
-    @PostMapping
+    @PostMapping("/register")
     @Operation(summary = "Register new user")
     public ResponseEntity<?> registerUser(
             @RequestBody RegisterUserRequest request,
@@ -62,11 +62,6 @@ public class UserController {
             @PathVariable(name = "id") Long id,
             @RequestBody UpdateUserRequest request
     ){
-        if (userService.existsByEmail(request.getEmail())) {
-            return ResponseEntity.badRequest().body(
-                    Map.of("email", "email already exists")
-            );
-        }
         var updatedUser = userService.updateUser(id, request);
         if (updatedUser == null) {
             return ResponseEntity.notFound().build();

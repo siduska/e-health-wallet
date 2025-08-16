@@ -10,7 +10,7 @@ public class RegisterUserRequest {
 
     @NotBlank(message = "Email is required")
     @Size(max = 255, message = "Maximal size of email is 255 characters")
-    String name;
+    String username;
 
     @NotBlank(message = "Email is required")
     @Email

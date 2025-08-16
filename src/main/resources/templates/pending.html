@@ -16,7 +16,27 @@
             border-bottom: 1px solid #ddd;
         }
         tr:hover {
-            background-color: rgba(32, 178, 170, 0.50);
+            background-color: rgba(32, 178, 170, 0.20);
+        }
+        .btn-approve {
+            background-color: green;
+            color: white;
+            padding: 7px;
+            border: none;
+            border-radius: 5px;
+        }
+        .btn-reject {
+            background-color: red;
+            color: white;
+            padding: 7px;
+            border: none;
+            border-radius: 5px;
+        }
+        .btn-approve:hover {
+            background-color: seagreen;
+        }
+        .btn-reject:hover {
+            background-color: rosybrown;
         }
     </style>
 </head>
@@ -32,18 +52,62 @@
             <th> Medical procedure</th>
             <th> Cost</th>
             <th> Status</th>
+            <th> Description </th>
+            <th> Approve </th>
+            <th> Reject </th>
         </tr>
         </thead>
-        <tbody>
-        <tr th:each="item, itemStat : *{pending}">
-            <td><p th:text="*{pending[__${itemStat.index}__].patientName}" /></td>
-            <td><p th:text="*{pending[__${itemStat.index}__].identificationNumber}" /></td>
-            <td><p th:text="*{pending[__${itemStat.index}__].medicalProcedure}" /></td>
-            <td><p th:text="*{pending[__${itemStat.index}__].cost}" /></td>
-            <td><p th:text="*{pending[__${itemStat.index}__].status}" /></td>
-        </tr>
-        </tbody>
+        <tbody id="pending-table-body"></tbody>
     </table>
 </div>
+<script>
+    async function loadPending() {
+        const statusFilter = "PENDING";
+        const res = await fetch(`/reimbursements/filter?filter=${encodeURIComponent(statusFilter)}`);
+        const items = await res.json();
+        const tbody = document.querySelector("#pending-table-body");
+        tbody.innerHTML = '';
+
+        items.forEach(item => {
+            const row = document.createElement("tr");
+            row.innerHTML = `
+            <td>${item.patientName}</td>
+            <td>${item.identificationNumber}</td>
+            <td>${item.medicalProcedure}</td>
+            <td>${item.cost}</td>
+            <td>${item.status}</td>
+            <td>
+                <input type="text" id="desc-${item.id}" placeholder="Description (optional) " />
+            </td>
+            <td>
+                <button class="btn-approve" onclick="updateReimbursement(${item.id}, 'APPROVED')">Approve</button>
+            </td>
+            <td>
+                <button class="btn-reject" onclick="updateReimbursement(${item.id}, 'REJECTED')">Reject</button>
+            </td>
+        `;
+            tbody.appendChild(row);
+        });
+    }
+
+    async function updateReimbursement(id, status) {
+        const description = document.querySelector(`#desc-${id}`).value;
+
+        const requestBody = {
+            status: status,
+            description: description
+        };
+
+        await fetch(`/reimbursements/${id}`, {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(requestBody)
+        });
+
+        await loadPending();
+    }
+
+    loadPending();
+</script>
 </body>
 </html>

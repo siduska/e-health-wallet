@@ -9,14 +9,14 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
 @AllArgsConstructor
-@RequestMapping("/requests")
+@RequestMapping("/")
 public class ReimbursementViewController {
 
     private final ReimbursementService reimbursementService;
 
-    @GetMapping("/pending")
+    @GetMapping
     public String getAllPendingReimbursements(Model model) {
         model.addAttribute("pending", reimbursementService.getAllReimbursementsByStatus("PENDING"));
-        return "pending";
+        return "index";
     }
 }

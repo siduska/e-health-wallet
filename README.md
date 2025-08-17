@@ -31,3 +31,4 @@ http://localhost:8080/swagger-ui/index.html
 2. To see app deployed on railway browse:
 https://e-health-wallet.up.railway.app
 
+Find testing postman collection in /test/postman_test_collection folder

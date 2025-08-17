@@ -61,11 +61,15 @@
     </table>
 </div>
 <script>
+    const API_URL = window.location.hostname === "localhost"
+        ? "http://localhost:8080"
+        : "https://e-health-wallet.up.railway.app";
     async function loadPending() {
         const statusFilter = "PENDING";
-        const res = await fetch(`/reimbursements/filter?filter=${encodeURIComponent(statusFilter)}`);
+        const res = await fetch(`${API_URL}/reimbursements/filter?filter=${encodeURIComponent(statusFilter)}`);
         const items = await res.json();
         const tbody = document.querySelector("#pending-table-body");
+
         tbody.innerHTML = '';
 
         items.forEach(item => {
@@ -98,7 +102,7 @@
             description: description
         };
 
-        await fetch(`/reimbursements/${id}`, {
+        await fetch(`${API_URL}/reimbursements/${id}`, {
             method: 'PUT',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(requestBody)

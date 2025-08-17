@@ -6,6 +6,7 @@ import com.siduska.ehealthwallet.dto.UserDto;
 import com.siduska.ehealthwallet.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -18,6 +19,7 @@ import java.util.Map;
 @AllArgsConstructor
 @RequestMapping("/users")
 @Tag(name = "Users", description = "Users API")
+@SecurityRequirement(name = "ehealthwalletapi")
 public class UserController {
 
     private final UserService userService;

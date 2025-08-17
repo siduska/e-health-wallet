@@ -17,10 +17,15 @@ mvn spring-boot:run
 docker build -t e-health-wallet-1.0.0 .
 docker run -d -p 8080:8080 e-health-wallet-1.0.0
 
+To stop docker container:
+docker ps
+docker stop <CONTAINER ID>
+
 To browse pending reimbursements locally go to:
 http://localhost:8080/
 To browse swagger UI locally go to:
 http://localhost:8080/swagger-ui/index.html
+
 
 
 2. To see app deployed on railway browse:

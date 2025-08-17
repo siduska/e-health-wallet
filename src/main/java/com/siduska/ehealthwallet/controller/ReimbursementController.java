@@ -21,6 +21,7 @@ import java.util.List;
 @RequestMapping("/reimbursements")
 @Tag(name = "Reimbursements", description = "Reimbursements API")
 @SecurityRequirement(name = "ehealthwalletapi")
+@CrossOrigin(origins = "https://e-health-wallet-production.up.railway.app/")
 public class ReimbursementController {
 
     private final ReimbursementService reimbursementService;

@@ -14,8 +14,6 @@ export class App implements OnInit {
 
   protected readonly title = signal('e-health-wallet');
 
-  constructor(private res: ReimbursementsService) {}
-
   ngOnInit(): void {
   }
 }

@@ -30,8 +30,10 @@ http://localhost:8080/swagger-ui/index.html
 
 2. To see app deployed on railway browse:
 https://e-health-wallet.up.railway.app
-You will get view of pending reimburement requests, you are able to approve/reject request
+You will get view of pending reimbursement requests, you are able to approve/reject request
 Link to browse swagger doc:
 https://e-health-wallet.up.railway.app/swagger-ui/index.html
 
 Find testing postman collection in /test/postman_test_collection folder
+
+Angular fronted is now in dev to add and review reimbursement requests.

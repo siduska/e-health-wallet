@@ -1,0 +1,88 @@
+<style>
+  input, select {
+    width: 100%;
+    margin-left: auto;
+    margin-right: auto;
+    padding: 12px 20px;
+    display: inline-block;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+  }
+
+  input:hover, button:hover {
+    background-color: rgba(32, 178, 170, 0.20);
+  }
+
+  div {
+    width: 75%;
+    margin-left: auto;
+    margin-right: auto;
+    border-radius: 5px;
+    background-color: #f2f2f2;
+    padding: 20px;
+  }
+  .error {
+    color: red;
+  }
+  button {
+    width: 100%;
+    background-color: rgba(32, 178, 170);
+    color: white;
+    padding: 14px 20px;
+    margin: 8px 0;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+</style>
+
+<div>
+<form [formGroup]="reimbursementsForm" (ngSubmit)="submit()">
+
+  <div>
+    <label>Patient name:</label>
+    <input type="text" formControlName="patientName">
+    @if (submitted && reimbursementsForm.get('patientName')?.invalid) {
+      <div class="error">Patient name is required.</div>
+    }
+  </div>
+
+  <div>
+    <label>Identification number:</label>
+    <input type="text" formControlName="identificationNumber">
+    @if (submitted && reimbursementsForm.get('identificationNumber')?.invalid) {
+      <div class="error">Identification number is required.</div>
+    }
+  </div>
+
+  <div>
+    <label>Medical procedure:</label>
+    <input type="text" formControlName="medicalProcedure">
+    @if (submitted && reimbursementsForm.get('medicalProcedure')?.invalid) {
+      <div class="error">Medical procedure is required.</div>
+    }
+  </div>
+
+  <div>
+    <label>Cost:</label>
+    <input type="number" formControlName="cost"
+      step="0.01" min="0" class="form-control"/>
+    @if (submitted && reimbursementsForm.get('cost')?.invalid) {
+      <div class="error">Cost must be a positive number with 2 decimals.</div>
+    }
+  </div>
+
+  <div>
+    <label>Status:</label>
+    <select formControlName="status" class="form-control">
+      @for (s of statuses; track s) {
+        <option [value]="s">{{ s }}</option>
+      }
+    </select>
+  </div>
+
+  <button type="submit">Submit</button>
+
+</form>
+</div>

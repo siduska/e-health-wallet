@@ -1,0 +1,42 @@
+<style>
+  table {
+    width: 90%;
+  }
+  th {
+    background-color: lightseagreen;
+  }
+  th, td {
+    text-align: left;
+    padding: 8px;
+    border-bottom: 1px solid #ddd;
+  }
+  tr:hover {
+    background-color: rgba(32, 178, 170, 0.20);
+  }
+</style>
+
+  <table>
+    <thead>
+    <tr>
+      <th>ID</th>
+      <th>Patient name</th>
+      <th>Identification number</th>
+      <th>Medical procedure</th>
+      <th>Cost</th>
+      <th>Status</th>
+    </tr>
+    </thead>
+    <tbody>
+      @for (item of reimbursements; track item.id) {
+
+        <tr>
+          <td>{{ item.id }}</td>
+          <td>{{ item.patientName }}</td>
+          <td>{{ item.identificationNumber }}</td>
+          <td>{{ item.medicalProcedure }}</td>
+          <td>{{ item.cost }}</td>
+          <td>{{ item.status }}</td>
+        </tr>
+      }
+    </tbody>
+  </table>

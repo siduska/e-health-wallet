@@ -13,15 +13,6 @@
   input:hover, button:hover {
     background-color: rgba(32, 178, 170, 0.20);
   }
-
-  div {
-    width: 75%;
-    margin-left: auto;
-    margin-right: auto;
-    border-radius: 5px;
-    background-color: #f2f2f2;
-    padding: 20px;
-  }
   .error {
     color: red;
   }
@@ -30,59 +21,67 @@
     background-color: rgba(32, 178, 170);
     color: white;
     padding: 14px 20px;
-    margin: 8px 0;
     border: none;
     border-radius: 4px;
     cursor: pointer;
   }
 </style>
 
-<div>
-<form [formGroup]="reimbursementsForm" (ngSubmit)="submit()">
+<div class="container mt-3">
+  <form [formGroup]="reimbursementsForm" (ngSubmit)="submit()">
+    <div class="row g-3">
 
-  <div>
-    <label>Patient name:</label>
-    <input type="text" formControlName="patientName">
-    @if (submitted && reimbursementsForm.get('patientName')?.invalid) {
-      <div class="error">Patient name is required.</div>
-    }
-  </div>
+      <!-- Left column -->
+      <div class="col-md-6">
+        <div>
+          <label class="form-label">Patient name:</label>
+          <input type="text" class="form-control" formControlName="patientName">
+          @if (submitted && reimbursementsForm.get('patientName')?.invalid) {
+            <div class="text-danger">Patient name is required.</div>
+          }
+        </div>
 
-  <div>
-    <label>Identification number:</label>
-    <input type="text" formControlName="identificationNumber">
-    @if (submitted && reimbursementsForm.get('identificationNumber')?.invalid) {
-      <div class="error">Identification number is required.</div>
-    }
-  </div>
+        <div>
+          <label class="form-label">Identification number:</label>
+          <input type="text" class="form-control" formControlName="identificationNumber">
+          @if (submitted && reimbursementsForm.get('identificationNumber')?.invalid) {
+            <div class="text-danger">Identification number is required.</div>
+          }
+        </div>
 
-  <div>
-    <label>Medical procedure:</label>
-    <input type="text" formControlName="medicalProcedure">
-    @if (submitted && reimbursementsForm.get('medicalProcedure')?.invalid) {
-      <div class="error">Medical procedure is required.</div>
-    }
-  </div>
+        <div>
+          <label class="form-label">Medical procedure:</label>
+          <input type="text" class="form-control" formControlName="medicalProcedure">
+          @if (submitted && reimbursementsForm.get('medicalProcedure')?.invalid) {
+            <div class="text-danger">Medical procedure is required.</div>
+          }
+        </div>
+      </div>
 
-  <div>
-    <label>Cost:</label>
-    <input type="number" formControlName="cost"
-      step="0.01" min="0" class="form-control"/>
-    @if (submitted && reimbursementsForm.get('cost')?.invalid) {
-      <div class="error">Cost must be a positive number with 2 decimals.</div>
-    }
-  </div>
+      <!-- Right column -->
+      <div class="col-md-6 d-flex flex-column">
+        <div>
+          <label class="form-label">Cost:</label>
+          <input type="number" formControlName="cost" step="0.01" min="0" class="form-control"/>
+          @if (submitted && reimbursementsForm.get('cost')?.invalid) {
+            <div class="text-danger">Cost must be a positive number with 2 decimals.</div>
+          }
+        </div>
 
-  <div>
-    <label>Status:</label>
-    <select formControlName="status" class="form-control">
-      @for (s of statuses; track s) {
-        <option [value]="s">{{ s }}</option>
-      }
-    </select>
-  </div>
+        <div>
+          <label class="form-label">Status:</label>
+          <select formControlName="status" class="form-select">
+            @for (s of statuses; track s) {
+              <option [value]="s">{{ s }}</option>
+            }
+          </select>
+        </div>
 
-  <button type="submit">Submit</button>
+        <div class="mt-auto d-grid">
+          <button type="submit">Submit</button>
+        </div>
+      </div>
 
-</form>
+    </div>
+  </form>
 </div>

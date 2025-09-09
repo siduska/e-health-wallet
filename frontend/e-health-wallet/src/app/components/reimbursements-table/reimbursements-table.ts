@@ -9,7 +9,7 @@ import {of} from 'rxjs';
   styleUrl: './reimbursements-table.css'
 })
 export class ReimbursementsTable implements OnInit {
-  reimbursements: Iterable<ReimbursementDto> = [];
+  reimbursements: ReimbursementDto[] = [];
 
   constructor(private reimbursementService: ReimbursementsService) {}
 
@@ -18,7 +18,16 @@ export class ReimbursementsTable implements OnInit {
       next: (res) => this.reimbursements = res
     });
 
-    this.reimbursementService.loadReimbursements();
+    this.reimbursementService.loadPendingReimbursements();
+  }
+
+  deleteReimbursement(id: number): void {
+    this.reimbursementService.deleteReimbursement(id).subscribe({
+      next: () => {
+        this.reimbursements = this.reimbursements.filter(r => r.id !== id);
+      },
+      error: (err) => console.error('Error deleting reimbursement', err)
+    });
   }
 
   protected readonly of = of;

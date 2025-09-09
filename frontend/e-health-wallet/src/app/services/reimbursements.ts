@@ -3,6 +3,7 @@ import {HttpClient, HttpHeaders} from '@angular/common/http';
 import {BehaviorSubject, Observable, tap} from 'rxjs';
 import {ReimbursementDto} from '../models/ReimbursementDto';
 import {CreateReimbursementRequest} from '../models/CreateReimbursementRequest';
+import { EMPTY } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -20,13 +21,6 @@ export class ReimbursementsService {
   private reimbursementsSubject = new BehaviorSubject<ReimbursementDto[]>([]);
   reimbursements$ = this.reimbursementsSubject.asObservable();
 
-  getAllReimbursements(): Observable<Iterable<ReimbursementDto>> {
-    const headers = new HttpHeaders({
-      'Authorization': this.basicAuth
-    });
-    return this.http.get<ReimbursementDto[]>(this.baseUrl, { headers });
-  }
-
   loadReimbursements(): void {
     const headers = new HttpHeaders({ 'Authorization': this.basicAuth });
     this.http.get<ReimbursementDto[]>(this.baseUrl, { headers })
@@ -36,10 +30,33 @@ export class ReimbursementsService {
       });
   }
 
+  loadPendingReimbursements(): void {
+    const headers = new HttpHeaders({ 'Authorization': this.basicAuth });
+    this.http.get<ReimbursementDto[]>(
+      this.baseUrl + "/filter",
+      { headers,
+        params: { filter: 'PENDING' }
+      })
+      .subscribe({
+        next: (res) => this.reimbursementsSubject.next(res),
+        error: (err) => console.error('Error loading reimbursements', err)
+      });
+  }
+
   createReimbursement(request: CreateReimbursementRequest): Observable<ReimbursementDto> {
     const headers = new HttpHeaders({ 'Authorization': this.basicAuth });
     return this.http.post<ReimbursementDto>(this.baseUrl, request, { headers }).pipe(
-      tap(() => this.loadReimbursements()) // to update table after creation
+      tap(() => this.loadPendingReimbursements()) // to update table after creation
+    );
+  }
+
+  deleteReimbursement(id: number): Observable<void> {
+    if (!confirm('Are you sure you want to delete this reimbursement?')) {
+      return EMPTY;
+    }
+    const headers = new HttpHeaders({ 'Authorization': this.basicAuth });
+    return this.http.delete<void>(`${this.baseUrl}/${id}`, { headers }).pipe(
+      tap(() => this.loadPendingReimbursements()) // refresh table
     );
   }
 

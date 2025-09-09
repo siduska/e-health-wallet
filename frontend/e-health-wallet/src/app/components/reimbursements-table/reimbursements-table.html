@@ -22,24 +22,26 @@
   <table>
     <thead>
     <tr>
-      <th>ID</th>
       <th>Patient name</th>
       <th>Identification number</th>
       <th>Medical procedure</th>
       <th>Cost</th>
       <th>Status</th>
+      <th></th>
     </tr>
     </thead>
     <tbody>
       @for (item of reimbursements; track item.id) {
 
         <tr>
-          <td>{{ item.id }}</td>
           <td>{{ item.patientName }}</td>
           <td>{{ item.identificationNumber }}</td>
           <td>{{ item.medicalProcedure }}</td>
           <td>{{ item.cost }}</td>
           <td>{{ item.status }}</td>
+          <td>
+            <button class="btn btn-danger btn-sm" (click)="deleteReimbursement(item.id)">Delete</button>
+          </td>
         </tr>
       }
     </tbody>

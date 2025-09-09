@@ -1,8 +1,6 @@
 package com.siduska.ehealthwallet.mapper;
 
-import com.siduska.ehealthwallet.dto.CreateReimbursementRequest;
-import com.siduska.ehealthwallet.dto.ReimbursementDto;
-import com.siduska.ehealthwallet.dto.UpdateReimbursementRequest;
+import com.siduska.ehealthwallet.dto.*;
 import com.siduska.ehealthwallet.entitiy.Reimbursement;
 import com.siduska.ehealthwallet.entitiy.StatusEnum;
 import org.mapstruct.Mapper;
@@ -32,6 +30,9 @@ public interface ReimbursementMapper {
     default String mapStatusEnumToString(StatusEnum status) {
         return status != null ? status.name() : null;
     }
+
+    @Mapping(source = "status", target = "status", qualifiedByName = "statusEnumToString")
+    ReimbursementWithLogDto toReimbursementWithLogDto(ReimbursementWithLogProjection projection);
 
     @Named("stringToStatusEnum")
     default StatusEnum mapStringToStatusEnum(String status) {

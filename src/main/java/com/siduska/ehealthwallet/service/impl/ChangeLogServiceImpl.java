@@ -2,6 +2,7 @@ package com.siduska.ehealthwallet.service.impl;
 
 
 import com.siduska.ehealthwallet.entitiy.ChangeLog;
+import com.siduska.ehealthwallet.entitiy.Reimbursement;
 import com.siduska.ehealthwallet.entitiy.StatusEnum;
 import com.siduska.ehealthwallet.repository.ChangeLogRepository;
 import com.siduska.ehealthwallet.service.ChangeLogService;
@@ -20,10 +21,10 @@ public class ChangeLogServiceImpl implements ChangeLogService {
     private static final Logger LOGGER = LogManager.getLogger();
 
     @Override
-    public void createChangeLog(String oldStatus, String newStatus, String description, String userName) {
+    public void createChangeLog(String oldStatus, String newStatus, String description, String userName, Reimbursement reimbursement) {
         ChangeLog changeLog = new ChangeLog();
+        changeLog.setReimbursement(reimbursement);
         changeLog.setDescription(description);
-        changeLog.setChangeDateTime(LocalDateTime.now());
         changeLog.setOldStatus(StatusEnum.valueOf(oldStatus));
         changeLog.setNewStatus(StatusEnum.valueOf(newStatus));
         changeLog.setUserName(userName);

@@ -2,6 +2,7 @@ package com.siduska.ehealthwallet.controller;
 
 import com.siduska.ehealthwallet.dto.CreateReimbursementRequest;
 import com.siduska.ehealthwallet.dto.ReimbursementDto;
+import com.siduska.ehealthwallet.dto.ReimbursementWithLogDto;
 import com.siduska.ehealthwallet.dto.UpdateReimbursementRequest;
 import com.siduska.ehealthwallet.service.ReimbursementService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -10,6 +11,9 @@ import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
@@ -47,6 +51,15 @@ public class ReimbursementController {
             @Parameter(description = "Reimbursement id")
             @Valid @PathVariable(name = "id") Long id) {
         return ResponseEntity.ok(reimbursementService.getReimbursementById(id));
+    }
+
+    @GetMapping("/all")
+    @Operation(summary = "Get reimbursements page with 1é rows and logs")
+    public Page<ReimbursementWithLogDto> getReimbursementsWithLatestLog(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        return reimbursementService.getAllWithLog(pageable);
     }
 
     @PostMapping

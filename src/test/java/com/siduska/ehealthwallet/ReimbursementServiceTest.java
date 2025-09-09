@@ -123,7 +123,7 @@ public class ReimbursementServiceTest {
         then(reimbursementMapper).should().updateReimbursement(updateRequest, existing);
         then(reimbursementRepository).should().save(existing);
         then(changeLogService).should()
-                .createChangeLog("PENDING", "APPROVED", "Updated description", "testUser");
+                .createChangeLog("PENDING", "APPROVED", "Updated description", "testUser", existing);
     }
 
     @Test

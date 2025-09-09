@@ -3,6 +3,7 @@ package com.siduska.ehealthwallet.service.impl;
 import com.siduska.ehealthwallet.conf.ReimbursementNotFoundException;
 import com.siduska.ehealthwallet.dto.CreateReimbursementRequest;
 import com.siduska.ehealthwallet.dto.ReimbursementDto;
+import com.siduska.ehealthwallet.dto.ReimbursementWithLogDto;
 import com.siduska.ehealthwallet.dto.UpdateReimbursementRequest;
 import com.siduska.ehealthwallet.entitiy.Reimbursement;
 import com.siduska.ehealthwallet.entitiy.StatusEnum;
@@ -12,6 +13,8 @@ import com.siduska.ehealthwallet.service.ChangeLogService;
 import com.siduska.ehealthwallet.service.ReimbursementService;
 import com.siduska.ehealthwallet.service.UserService;
 import lombok.AllArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.Arrays;
@@ -37,7 +40,7 @@ public class ReimbursementServiceImpl implements ReimbursementService {
         reimbursementRepository.save(reimbursement);
 
         String newStatus = reimbursement.getStatus().toString().toUpperCase();
-        changelogService.createChangeLog(oldStatus, newStatus, request.getDescription(),userService.getUserName());
+        changelogService.createChangeLog(oldStatus, newStatus, request.getDescription(),userService.getUserName(), reimbursement);
 
         return reimbursementMapper.toReimbursementDto(reimbursement);
     }
@@ -46,6 +49,12 @@ public class ReimbursementServiceImpl implements ReimbursementService {
     public Iterable<ReimbursementDto> getAllReimbursements() {
         return reimbursementRepository.findAll()
                 .stream().map(reimbursementMapper::toReimbursementDto).toList();
+    }
+
+    @Override
+    public Page<ReimbursementWithLogDto> getAllWithLog(Pageable pageable) {
+        return reimbursementRepository.findAllWithLatestLogNative(pageable)
+                .map(reimbursementMapper::toReimbursementWithLogDto);
     }
 
     @Override

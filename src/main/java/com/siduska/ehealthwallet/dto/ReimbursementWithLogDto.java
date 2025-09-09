@@ -1,6 +1,5 @@
 package com.siduska.ehealthwallet.dto;
 
-import com.siduska.ehealthwallet.entitiy.StatusEnum;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

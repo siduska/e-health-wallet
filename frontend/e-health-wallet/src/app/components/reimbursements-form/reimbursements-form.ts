@@ -25,7 +25,7 @@ export class ReimbursementsForm {
       identificationNumber: ['', Validators.required],
       medicalProcedure: ['', Validators.required],
       cost: [0.00, [Validators.required, Validators.min(0.00)]],
-      status: [ReimbursementStatus.PENDING, Validators.required]
+      status: [{ value: ReimbursementStatus.PENDING, disabled: true }, Validators.required]
     });
   }
 
@@ -33,12 +33,16 @@ export class ReimbursementsForm {
     this.submitted = true;
     if (this.reimbursementsForm.invalid) return;
 
-    const request: CreateReimbursementRequest = this.reimbursementsForm.value;
+    //getRawValue - returns all form values including disabled, prevents status is not sent
+    const request: CreateReimbursementRequest = this.reimbursementsForm.getRawValue();
 
     this.reimbursementService.createReimbursement(request).subscribe({
       next: (res) => {
         this.createdReimbursement = res;
-        this.reimbursementsForm.reset();
+        //restores PENDING status, default formReset sets it to null
+        this.reimbursementsForm.reset({
+          status: ReimbursementStatus.PENDING
+        });
         this.submitted = false;
       },
       error: (err) => console.error('Error creating reimbursement', err)

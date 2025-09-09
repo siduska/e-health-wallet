@@ -27,6 +27,10 @@
   }
 </style>
 
+<div class="container">
+  <h3> Add reimbursement request </h3>
+</div>
+
 <div class="container mt-3">
   <form [formGroup]="reimbursementsForm" (ngSubmit)="submit()">
     <div class="row g-3">
@@ -70,7 +74,7 @@
 
         <div>
           <label class="form-label">Status:</label>
-          <select formControlName="status" class="form-select">
+          <select formControlName="status" class="form-select" [disabled]="true">
             @for (s of statuses; track s) {
               <option [value]="s">{{ s }}</option>
             }

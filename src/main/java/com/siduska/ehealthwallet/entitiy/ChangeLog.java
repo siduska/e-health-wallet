@@ -18,7 +18,7 @@ public class ChangeLog {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    private LocalDateTime changeDateTime;
+    private LocalDateTime changeDateTime = LocalDateTime.now();
 
     @Enumerated(EnumType.STRING)
     private StatusEnum oldStatus;
@@ -28,5 +28,9 @@ public class ChangeLog {
 
     private String description;
     private String userName;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "reimbursement_id", nullable = false)
+    private Reimbursement reimbursement;
 
 }

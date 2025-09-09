@@ -13,7 +13,10 @@ create table if not exists change_log
     change_date_time TIMESTAMP,
     old_status       VARCHAR(8),
     new_tatus        VARCHAR(8),
-    user_name        VARCHAR(255)
+    user_name        VARCHAR(255),
+    reimbursement_id BIGINT,
+    constraint fk_change_log_reimbursement
+    foreign key (reimbursement_id) references reimbursement (id)
 );
 
 create table if not exists users

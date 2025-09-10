@@ -2,8 +2,10 @@ import { Injectable } from '@angular/core';
 import {HttpClient, HttpHeaders} from '@angular/common/http';
 import {BehaviorSubject, Observable, tap} from 'rxjs';
 import {ReimbursementDto} from '../models/ReimbursementDto';
+import {ReimbursementWithLogDto} from '../models/ReimbursementWithLogDto';
 import {CreateReimbursementRequest} from '../models/CreateReimbursementRequest';
 import { EMPTY } from 'rxjs';
+import {Page} from '../models/Page';
 
 @Injectable({
   providedIn: 'root'
@@ -20,6 +22,8 @@ export class ReimbursementsService {
 
   private reimbursementsSubject = new BehaviorSubject<ReimbursementDto[]>([]);
   reimbursements$ = this.reimbursementsSubject.asObservable();
+  private reimbursementsPageSubject = new BehaviorSubject<Page<ReimbursementWithLogDto> | null>(null);
+  reimbursementsPage$ = this.reimbursementsPageSubject.asObservable();
 
   loadReimbursements(): void {
     const headers = new HttpHeaders({ 'Authorization': this.basicAuth });
@@ -41,6 +45,19 @@ export class ReimbursementsService {
         next: (res) => this.reimbursementsSubject.next(res),
         error: (err) => console.error('Error loading reimbursements', err)
       });
+  }
+
+  loadReimbursementsWithLog(page: number = 0, size: number = 10): void {
+    const headers = new HttpHeaders({ 'Authorization': this.basicAuth });
+
+    this.http.get<Page<ReimbursementWithLogDto>>(this.baseUrl + '/all', {
+      headers,
+      params: { page: page.toString(), size: size.toString() }
+    }).pipe(
+      tap((res) => this.reimbursementsPageSubject.next(res))
+    ).subscribe({
+      error: (err) => console.error('Error loading reimbursements', err)
+    });
   }
 
   createReimbursement(request: CreateReimbursementRequest): Observable<ReimbursementDto> {

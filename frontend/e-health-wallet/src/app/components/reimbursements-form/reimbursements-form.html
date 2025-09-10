@@ -1,4 +1,4 @@
-<style>
+<!--style>
   input, select {
     width: 100%;
     margin-left: auto;
@@ -25,11 +25,7 @@
     border-radius: 4px;
     cursor: pointer;
   }
-</style>
-
-<div class="container">
-  <h3> Add reimbursement request </h3>
-</div>
+</style-->
 
 <div class="container mt-3">
   <form [formGroup]="reimbursementsForm" (ngSubmit)="submit()">
@@ -82,7 +78,7 @@
         </div>
 
         <div class="mt-auto d-grid">
-          <button type="submit">Submit</button>
+          <button class="full" type="submit">Submit</button>
         </div>
       </div>
 

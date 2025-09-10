@@ -54,7 +54,7 @@ public class ReimbursementController {
     }
 
     @GetMapping("/all")
-    @Operation(summary = "Get reimbursements page with 1é rows and logs")
+    @Operation(summary = "Get reimbursements page with 10 rows and logs")
     public Page<ReimbursementWithLogDto> getReimbursementsWithLatestLog(
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size) {

@@ -1,8 +1,6 @@
 package com.siduska.ehealthwallet.controller;
 
-import com.siduska.ehealthwallet.dto.RegisterUserRequest;
-import com.siduska.ehealthwallet.dto.UpdateUserRequest;
-import com.siduska.ehealthwallet.dto.UserDto;
+import com.siduska.ehealthwallet.dto.*;
 import com.siduska.ehealthwallet.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -10,6 +8,9 @@ import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
 
@@ -23,6 +24,8 @@ import java.util.Map;
 public class UserController {
 
     private final UserService userService;
+    private final UserDetailsService userDetailsService;
+    private final PasswordEncoder passwordEncoder;
 
     @GetMapping
     @Operation(summary = "Get all users")
@@ -55,6 +58,16 @@ public class UserController {
         var userDto = userService.createUser(request);
         var uri = uriBuilder.path("/users/{id}").buildAndExpand(userDto.getId()).toUri();
         return ResponseEntity.created(uri).body(userDto);
+    }
+
+    @PostMapping("/login")
+    @Operation(summary = "Login user")
+    public ResponseEntity<?> login (@RequestBody LoginRequest request) {
+        UserDetails userDetails = userDetailsService.loadUserByUsername(request.getUsername());
+        if (userDetails != null && passwordEncoder.matches(request.getPassword(), userDetails.getPassword())) {
+            return ResponseEntity.ok(new LoginUserResponse(userDetails.getUsername()));
+        }
+        return ResponseEntity.badRequest().body("No such user/password found");
     }
 
     @PutMapping("/{id}")

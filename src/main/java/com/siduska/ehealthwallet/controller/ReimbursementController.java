@@ -1,9 +1,6 @@
 package com.siduska.ehealthwallet.controller;
 
-import com.siduska.ehealthwallet.dto.CreateReimbursementRequest;
-import com.siduska.ehealthwallet.dto.ReimbursementDto;
-import com.siduska.ehealthwallet.dto.ReimbursementWithLogDto;
-import com.siduska.ehealthwallet.dto.UpdateReimbursementRequest;
+import com.siduska.ehealthwallet.dto.*;
 import com.siduska.ehealthwallet.service.ReimbursementService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -13,7 +10,7 @@ import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
@@ -55,11 +52,19 @@ public class ReimbursementController {
 
     @GetMapping("/all")
     @Operation(summary = "Get reimbursements page with 10 rows and logs")
-    public Page<ReimbursementWithLogDto> getReimbursementsWithLatestLog(
+    public ResponseEntity<PageResponse<ReimbursementWithLogDto>> getReimbursements(
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size) {
-        Pageable pageable = PageRequest.of(page, size);
-        return reimbursementService.getAllWithLog(pageable);
+
+        Page<ReimbursementWithLogDto> reimbursements = reimbursementService.getAllWithLog(PageRequest.of(page, size));
+        PageResponse<ReimbursementWithLogDto> response = PageResponse.from(reimbursements);
+        HttpHeaders headers = response.toHttpHeaders();
+
+        if (reimbursements.isEmpty()) {
+            return ResponseEntity.noContent().headers(headers).build();
+        }
+
+        return ResponseEntity.ok().headers(headers).body(response);
     }
 
     @PostMapping

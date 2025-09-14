@@ -1,7 +1,6 @@
 [build]
-base    = "frontend/e-health-wallet"
-publish = "dist/e-health-wallet"
-command = "ng build --configuration production"
+publish = "frontend/e-health-wallet/dist/e-health-wallet"
+command = "cd frontend/e-health-wallet && npm install && ng build --configuration production"
 
 [[redirects]]
 from = "/*"

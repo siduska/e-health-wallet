@@ -1,3 +1,8 @@
+[build]
+base    = "frontend/e-health-wallet"
+publish = "dist/e-health-wallet"
+command = "ng build --configuration production"
+
 [[redirects]]
 from = "/*"
 to = "/index.html"

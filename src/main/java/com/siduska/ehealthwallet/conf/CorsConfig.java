@@ -15,6 +15,8 @@ public class CorsConfig {
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration config = new CorsConfiguration();
         config.setAllowedOrigins(List.of(
+                "http://localhost:8080",
+                "https://e-health-wallet.up.railway.app",
                 "http://localhost:4200",
                 "https://e-health-wallet.netlify.app"
         ));

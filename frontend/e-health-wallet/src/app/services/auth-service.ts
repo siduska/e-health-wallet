@@ -3,12 +3,14 @@ import {User} from '../models/User';
 import {HttpClient, HttpHeaders} from '@angular/common/http';
 import {LoginRequest} from '../models/LoginRequest';
 import {Injectable} from '@angular/core';
+import {environment} from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
-  private apiUrl = 'http://localhost:8080/users/login';
+  private baseUrl = environment.apiUrl;
+  private apiUrl = this.baseUrl + '/users/login';
   private username = 'admin';
   private password = 'password';
   private basicAuth = 'Basic ' + btoa(`${this.username}:${this.password}`);

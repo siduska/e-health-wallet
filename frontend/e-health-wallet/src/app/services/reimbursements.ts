@@ -6,13 +6,16 @@ import {ReimbursementWithLogDto} from '../models/ReimbursementWithLogDto';
 import {CreateReimbursementRequest} from '../models/CreateReimbursementRequest';
 import { EMPTY } from 'rxjs';
 import {Page} from '../models/Page';
+import {environment} from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ReimbursementsService {
 
-  private baseUrl = 'http://localhost:8080/reimbursements';
+  private apiUrl = environment.apiUrl;
+
+  private baseUrl = this.apiUrl + '/reimbursements';
 
   private username = 'admin';
   private password = 'password';

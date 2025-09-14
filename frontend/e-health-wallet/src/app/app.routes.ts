@@ -1,12 +1,23 @@
 import { Routes } from '@angular/router';
-import { AddReimbursementsComponent } from './pages/add-reimbursements/add-reimbursements';
-import { ReviewReimbursementsComponent } from './pages/review-reimbursements/review-reimbursements';
-import {LoginComponent} from './pages/login/login';
-import {AuthGuard} from './services/auth-guard';
+import { LoginComponent } from './pages/login/login';
+import { AuthGuard } from './services/auth-guard';
 
 export const routes: Routes = [
   { path: '', redirectTo: '/review', pathMatch: 'full' },
   { path: 'login', component: LoginComponent },
-  { path: 'review', component: ReviewReimbursementsComponent, canActivate: [AuthGuard] },
-  { path: 'add', component: AddReimbursementsComponent, canActivate: [AuthGuard] }
+  {
+    path: 'review',
+    loadComponent: () =>
+      import('./pages/review-reimbursements/review-reimbursements')
+        .then(m => m.ReviewReimbursementsComponent),
+    canActivate: [AuthGuard]
+  },
+  {
+    path: 'add',
+    loadComponent: () =>
+      import('./pages/add-reimbursements/add-reimbursements')
+        .then(m => m.AddReimbursementsComponent),
+    canActivate: [AuthGuard]
+  }
 ];
+

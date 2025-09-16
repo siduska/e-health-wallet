@@ -3,5 +3,5 @@ export interface Page<T> {
   totalElements: number;
   totalPages: number;
   size: number;
-  number: number; // current page
+  page: number; // current page
 }

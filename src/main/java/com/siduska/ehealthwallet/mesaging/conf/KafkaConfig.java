@@ -1,5 +1,6 @@
 package com.siduska.ehealthwallet.mesaging.conf;
 
+import jakarta.annotation.PostConstruct;
 import org.apache.kafka.clients.admin.NewTopic;
 import org.apache.kafka.clients.producer.ProducerConfig;
 import org.apache.kafka.common.serialization.StringSerializer;
@@ -23,6 +24,11 @@ public class KafkaConfig {
 
     @Value("${spring.kafka.properties.sasl.jaas.config:}")
     private String jaasConfig;
+
+    @PostConstruct
+    public void init() {
+        System.out.println(">>> Kafka bootstrapServers property: " + bootstrapServers);
+    }
 
     @Bean
     public ProducerFactory<String, Object> producerFactory() {

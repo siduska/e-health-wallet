@@ -12,7 +12,7 @@ import java.util.List;
 @Configuration
 public class SwaggerConfig {
 
-    @Value("${SWAGGER_SERVER_URL}")
+    @Value("${SWAGGER_SERVER_URL:https://e-health-wallet.up.railway.app}")
     private String swaggerServerUrl;
 
     @Bean

@@ -1,0 +1,6 @@
+# Lokálne docker súbory
+Dockerfile.dev
+docker-compose.yml
+
+# Lokálne konfigurácie
+application-local.properties

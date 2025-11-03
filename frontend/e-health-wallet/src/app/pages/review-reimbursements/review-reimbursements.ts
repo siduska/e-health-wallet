@@ -10,7 +10,7 @@ import {Page} from '../../models/Page';
   styleUrl: './review-reimbursements.css'
 })
 export class ReviewReimbursementsComponent implements OnInit {
-  page!: Page<ReimbursementWithLogDto>;
+  page: Page<ReimbursementWithLogDto> | null = null;
   reimbursementsWithLog: ReimbursementWithLogDto[] = [];
 
   constructor(private reimbursementService: ReimbursementsService) {}

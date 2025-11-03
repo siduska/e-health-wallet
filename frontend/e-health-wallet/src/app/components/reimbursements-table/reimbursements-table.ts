@@ -2,6 +2,8 @@ import {Component, OnInit} from '@angular/core';
 import {ReimbursementDto} from '../../models/ReimbursementDto';
 import {ReimbursementsService} from '../../services/reimbursements';
 import {of} from 'rxjs';
+import {ReimbursementNotificationService} from '../../services/ReimbursementNotificationService';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-reimbursements-table',
@@ -11,7 +13,11 @@ import {of} from 'rxjs';
 export class ReimbursementsTable implements OnInit {
   reimbursements: ReimbursementDto[] = [];
 
-  constructor(private reimbursementService: ReimbursementsService) {}
+  constructor(
+    private reimbursementService: ReimbursementsService,
+    private reimbursementNotificationService: ReimbursementNotificationService,
+    private toastr: ToastrService
+  ) {}
 
   ngOnInit() {
     this.reimbursementService.reimbursements$.subscribe({
@@ -19,6 +25,13 @@ export class ReimbursementsTable implements OnInit {
     });
 
     this.reimbursementService.loadPendingReimbursements();
+
+    this.reimbursementNotificationService.watchClaimUpdates()
+      .subscribe(event => {
+        this.toastr.info(`Reimbursement #${event.identificationNumber} changed status to: ${event.newStatus}`, 'Info', {
+          positionClass: 'toast-top-right'
+        });
+      });
   }
 
   deleteReimbursement(id: number): void {

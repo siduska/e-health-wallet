@@ -13,7 +13,8 @@ import org.springframework.web.socket.messaging.SessionDisconnectEvent;
 
 @Configuration
 @EnableWebSocketMessageBroker
-public class WebSocketConfig implements WebSocketMessageBrokerConfigurer, ApplicationListener<SessionDisconnectEvent> {
+public class WebSocketConfig implements WebSocketMessageBrokerConfigurer,
+        ApplicationListener<SessionDisconnectEvent> {
 
     private static final Logger LOGGER = LogManager.getLogger();
 

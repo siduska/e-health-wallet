@@ -28,6 +28,7 @@ public class KafkaConfig {
     @PostConstruct
     public void init() {
         System.out.println(">>> Kafka bootstrapServers property: " + bootstrapServers);
+        System.out.println(">>> Kafka JAAS config loaded: " + (jaasConfig != null && !jaasConfig.contains("${")));
     }
 
     @Bean

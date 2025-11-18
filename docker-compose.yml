@@ -1,4 +1,8 @@
 services:
+
+# ----------------------------------------
+# Kafka, zookeeper
+# ----------------------------------------
   zookeeper:
     image: confluentinc/cp-zookeeper:7.6.0
     container_name: zookeeper
@@ -7,6 +11,8 @@ services:
       ZOOKEEPER_TICK_TIME: 2000
     ports:
       - "2181:2181"
+    networks:
+      - app-net
 
   kafka:
     image: confluentinc/cp-kafka:7.6.0
@@ -22,6 +28,8 @@ services:
       KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_DOCKER:PLAINTEXT
       KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT_DOCKER
       KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+    networks:
+      - app-net
 
   kafka-ui:
     image: provectuslabs/kafka-ui:latest
@@ -34,3 +42,34 @@ services:
       KAFKA_CLUSTERS_0_ZOOKEEPER: zookeeper:2181
     depends_on:
       - kafka
+    networks:
+      - app-net
+
+  # ----------------------------------------
+  # PostgreSQL
+  # ----------------------------------------
+  postgres:
+    image: postgres:16
+    container_name: postgres
+    restart: always
+    environment:
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: pass
+      POSTGRES_DB: e_health_wallet
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    networks:
+      - app-net
+
+# ----------------------------------------
+# NETWORK + VOLUMES
+# ----------------------------------------
+
+networks:
+  app-net:
+    driver: bridge
+
+volumes:
+  postgres-data:

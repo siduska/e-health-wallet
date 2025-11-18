@@ -14,6 +14,7 @@ import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 
 @Service
 @AllArgsConstructor
@@ -24,13 +25,13 @@ public class ChangeLogServiceImpl implements ChangeLogService {
     private final KafkaTemplate<String, Object> kafkaTemplate;
 
     @Override
-    public void createChangeLog(String oldStatus, String newStatus, String description, String userName, Reimbursement reimbursement) {
+    public void createChangeLog(String oldStatus, String newStatus, String description, String username, Reimbursement reimbursement) {
         ChangeLog changeLog = new ChangeLog();
         changeLog.setReimbursement(reimbursement);
         changeLog.setDescription(description);
         changeLog.setOldStatus(StatusEnum.valueOf(oldStatus));
         changeLog.setNewStatus(StatusEnum.valueOf(newStatus));
-        changeLog.setUserName(userName);
+        changeLog.setUsername(username);
         changeLogRepository.save(changeLog);
 
         ReimbursementStatusChanged event = new ReimbursementStatusChanged();
@@ -38,7 +39,7 @@ public class ChangeLogServiceImpl implements ChangeLogService {
         event.setIdentificationNumber(reimbursement.getIdentificationNumber());
         event.setOldStatus(oldStatus);
         event.setNewStatus(newStatus);
-        event.setChangedBy(userName);
+        event.setChangedBy(username);
         event.setChangedAt(LocalDateTime.now());
 
         kafkaTemplate.send("reimbursement-status-changed", event);

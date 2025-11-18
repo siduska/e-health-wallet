@@ -57,7 +57,8 @@ public class SecurityConfig {
                                 "/h2-console/**",
                                 "/ws/**",
                                 "/topic/**",
-                                "/app/**")
+                                "/app/**",
+                                "/users/login")
                 )
                 .sessionManagement(session -> session
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS)

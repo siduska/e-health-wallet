@@ -2,7 +2,7 @@ package com.siduska.ehealthwallet.mesaging.event;
 
 import lombok.Data;
 
-import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 
 @Data
 public class ReimbursementStatusChanged {
@@ -12,6 +12,6 @@ public class ReimbursementStatusChanged {
     private String oldStatus;
     private String newStatus;
     private String changedBy;
-    private LocalDateTime changedAt;
+    private OffsetDateTime changedAt;
 
 }

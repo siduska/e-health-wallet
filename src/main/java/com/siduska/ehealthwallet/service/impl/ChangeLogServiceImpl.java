@@ -13,7 +13,6 @@ import org.apache.logging.log4j.Logger;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
 
 @Service
@@ -40,7 +39,7 @@ public class ChangeLogServiceImpl implements ChangeLogService {
         event.setOldStatus(oldStatus);
         event.setNewStatus(newStatus);
         event.setChangedBy(username);
-        event.setChangedAt(LocalDateTime.now());
+        event.setChangedAt(OffsetDateTime.now());
 
         kafkaTemplate.send("reimbursement-status-changed", event);
 
